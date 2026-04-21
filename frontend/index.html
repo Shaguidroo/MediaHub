@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediaHub - Biblioteca Multimedia</title>
+    
+    <!-- Estilos externos -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+</head>
+<body>
+    <!-- HEADER -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-compact-disc"></i>
+                    MediaHub
+                </div>
+                <nav>
+                    <ul class="nav-items">
+                        <li><a href="#inicio">Inicio</a></li>
+                        <li><a href="#explorar">Explorar</a></li>
+                        <li><a href="#categorias">Categorías</a></li>
+                        <li><a href="#contacto">Contacto</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="container">
+        <!-- HERO SECTION -->
+        <section class="hero" id="inicio">
+            <h1>Tu Biblioteca Multimedia</h1>
+            <p>Accede a una vasta colección de libros, audiolibros, videos educativos y música en un mismo lugar</p>
+        </section>
+
+        <!-- SEARCH & FILTERS -->
+        <section class="search-section">
+            <div class="search-container">
+                <div class="search-wrapper">
+                    <i class="fas fa-search search-icon"></i>
+                    <input 
+                        type="text" 
+                        id="searchInput" 
+                        placeholder="Busca por título, autor, género o palabra clave..."
+                    >
+                </div>
+            </div>
+
+            <div class="filters" id="filterContainer">
+                <button class="filter-tag active" data-filter="todos">Todos</button>
+                <button class="filter-tag" data-filter="libro">📚 Libros</button>
+                <button class="filter-tag" data-filter="audiolibro">🎧 Audiolibros</button>
+                <button class="filter-tag" data-filter="video">🎬 Videos</button>
+                <button class="filter-tag" data-filter="musica">🎵 Música</button>
+            </div>
+        </section>
+
+        <!-- RESULTS -->
+        <section class="results-section" id="explorar">
+            <div class="results-header">
+                <h2>Resultados</h2>
+                <div class="sort-options">
+                    <button class="sort-btn active" data-sort="reciente">Reciente</button>
+                    <button class="sort-btn" data-sort="titulo">Título A-Z</button>
+                    <button class="sort-btn" data-sort="autor">Autor</button>
+                </div>
+            </div>
+
+            <div id="resultados" class="media-grid">
+                <!-- Los resultados se cargan aquí dinámicamente -->
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 MediaHub - Biblioteca Multimedia. Gestión inteligente de contenido digital.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="utils.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

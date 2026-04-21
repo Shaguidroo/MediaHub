@@ -1,0 +1,71 @@
+version: '3.8'
+
+services:
+  # MongoDB - Base de datos
+  mongodb:
+    image: mongo:7.0
+    container_name: mongodb-multimedia
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_DATABASE: biblioteca_multimedia
+    volumes:
+      - mongo_data:/data/db
+      # Asegúrate de que la ruta al JS sea correcta en tu carpeta
+      - ./init-db.js:/docker-entrypoint-initdb.d/init-db.js:ro
+    networks:
+      - multimedia-network
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s # Un poco más de tiempo para el primer arranque con init-db
+
+  # Backend - FastAPI
+  backend:
+    build:
+      context: ./backend # Docker buscará el Dockerfile aquí
+      dockerfile: Dockerfile
+    container_name: api-multimedia
+    restart: always
+    ports:
+      - "8000:8000"
+    environment:
+      MONGODB_URL: mongodb://admin:password@mongodb-multimedia:27017/
+      DB_NAME: biblioteca_multimedia
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    volumes:
+      - ./backend:/app
+      - ./media:/app/media # Mapea la carpeta media de la raíz al contenedor
+    networks:
+      - multimedia-network
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
+  # Frontend - Servidor web simple
+  frontend:
+    image: nginx:alpine
+    container_name: frontend-multimedia
+    restart: always
+    ports:
+      - "8080:80"
+    volumes:
+      - ./frontend:/usr/share/nginx/html:ro
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    networks:
+      - multimedia-network
+    depends_on:
+      - backend
+
+networks:
+  multimedia-network:
+    driver: bridge
+
+volumes:
+  mongo_data:
+    driver: local

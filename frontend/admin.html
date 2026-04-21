@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediaHub Admin - Panel de Administración</title>
+    
+    <!-- Estilos externos -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link href="admin-style.css" rel="stylesheet">
+</head>
+<body>
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <i class="fas fa-sliders-h"></i>
+            <h2>MediaHub Admin</h2>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="#" class="nav-item active" data-view="dashboard">
+                <i class="fas fa-chart-line"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="#" class="nav-item" data-view="medios">
+                <i class="fas fa-books"></i>
+                <span>Gestionar Medios</span>
+            </a>
+            <a href="#" class="nav-item" data-view="crear">
+                <i class="fas fa-plus-circle"></i>
+                <span>Crear Medio</span>
+            </a>
+            <a href="#" class="nav-item" data-view="reportes">
+                <i class="fas fa-chart-pie"></i>
+                <span>Reportes</span>
+            </a>
+            <a href="#" class="nav-item" data-view="configuracion">
+                <i class="fas fa-cog"></i>
+                <span>Configuración</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <a href="index.html" class="btn-volver">
+                <i class="fas fa-arrow-left"></i>
+                Volver a Biblioteca
+            </a>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="admin-container">
+        <!-- HEADER -->
+        <header class="admin-header">
+            <div class="header-left">
+                <h1>Panel de Administración</h1>
+            </div>
+            <div class="header-right">
+                <div class="user-info">
+                    <i class="fas fa-user-circle"></i>
+                    <span>Administrador</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- CONTENT -->
+        <div class="admin-content">
+            
+            <!-- DASHBOARD VIEW -->
+            <div id="dashboard-view" class="view active">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon total">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>Total de Medios</h3>
+                            <p id="stat-total" class="stat-value">--</p>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon libros">
+                            <i class="fas fa-book-open"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>Libros</h3>
+                            <p id="stat-libros" class="stat-value">--</p>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon audios">
+                            <i class="fas fa-headphones"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>Audiolibros</h3>
+                            <p id="stat-audios" class="stat-value">--</p>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon videos">
+                            <i class="fas fa-film"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>Videos</h3>
+                            <p id="stat-videos" class="stat-value">--</p>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon musica">
+                            <i class="fas fa-music"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>Música</h3>
+                            <p id="stat-musica" class="stat-value">--</p>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon generos">
+                            <i class="fas fa-tags"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>Géneros</h3>
+                            <p id="stat-generos" class="stat-value">--</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-grid">
+                    <!-- Gráfico de distribución -->
+                    <div class="chart-container">
+                        <h3>Distribución por Tipo</h3>
+                        <div id="tipo-chart" class="tipo-chart"></div>
+                    </div>
+
+                    <!-- Últimos medios agregados -->
+                    <div class="recent-container">
+                        <h3>Últimos Medios Agregados</h3>
+                        <div id="recent-list" class="recent-list"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MEDIOS VIEW -->
+            <div id="medios-view" class="view">
+                <div class="medios-toolbar">
+                    <div class="search-bar">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="medios-search" placeholder="Buscar medios...">
+                    </div>
+                    <div class="toolbar-buttons">
+                        <button id="btn-refresh" class="btn btn-secondary">
+                            <i class="fas fa-sync-alt"></i> Actualizar
+                        </button>
+                        <a href="#" class="btn btn-primary" data-view="crear">
+                            <i class="fas fa-plus"></i> Nuevo Medio
+                        </a>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="medios-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Título</th>
+                                <th>Autor</th>
+                                <th>Tipo</th>
+                                <th>Género</th>
+                                <th>Año</th>
+                                <th>Creado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="medios-tbody">
+                            <tr>
+                                <td colspan="8" style="text-align: center;">Cargando...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- CREAR VIEW -->
+            <div id="crear-view" class="view">
+                <div class="form-container">
+                    <h2>Crear Nuevo Medio</h2>
+                    
+                    <form id="form-crear" class="form-grid">
+                        <div class="form-group">
+                            <label>Título *</label>
+                            <input type="text" name="titulo" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Autor *</label>
+                            <input type="text" name="autor" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Tipo *</label>
+                            <select name="tipo" required>
+                                <option value="">Seleccionar tipo</option>
+                                <option value="libro">Libro</option>
+                                <option value="audiolibro">Audiolibro</option>
+                                <option value="video">Video</option>
+                                <option value="musica">Música</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Género</label>
+                            <input type="text" name="genero" placeholder="ej: Ficción, Drama...">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Año</label>
+                            <input type="number" name="año" min="1900" max="2100">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Duración</label>
+                            <input type="text" name="duracion" placeholder="ej: 250 páginas, 5:45">
+                        </div>
+
+                        <div class="form-group full">
+                            <label>Descripción</label>
+                            <textarea name="descripcion" rows="4"></textarea>
+                        </div>
+
+                        <div class="form-group full">
+                            <label>Etiquetas (separadas por coma)</label>
+                            <input type="text" name="tags" placeholder="ej: clásico, aventura, ficción">
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Crear Medio
+                            </button>
+                            <button type="reset" class="btn btn-secondary">
+                                <i class="fas fa-redo"></i> Limpiar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- REPORTES VIEW -->
+            <div id="reportes-view" class="view">
+                <h2>Reportes</h2>
+                
+                <div class="reportes-grid">
+                    <div class="reporte-card">
+                        <h3>Estadísticas Generales</h3>
+                        <div id="stats-detail" class="stats-detail">
+                            Cargando...
+                        </div>
+                    </div>
+
+                    <div class="reporte-card">
+                        <h3>Medios por Género</h3>
+                        <div id="generos-detail" class="list-detail">
+                            Cargando...
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CONFIGURACIÓN VIEW -->
+            <div id="configuracion-view" class="view">
+                <div class="config-container">
+                    <h2>Configuración</h2>
+                    
+                    <div class="config-section">
+                        <h3>API</h3>
+                        <div class="config-item">
+                            <label>URL Base API</label>
+                            <input type="text" id="config-api-url" value="http://localhost:8000">
+                        </div>
+                    </div>
+
+                    <div class="config-section">
+                        <h3>Datos</h3>
+                        <div class="config-actions">
+                            <button id="btn-export" class="btn btn-secondary">
+                                <i class="fas fa-download"></i> Exportar a JSON
+                            </button>
+                            <button id="btn-clear-cache" class="btn btn-warning">
+                                <i class="fas fa-trash"></i> Limpiar Cache
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="config-section">
+                        <h3>Sistema</h3>
+                        <p>MediaHub Admin v1.0.0</p>
+                        <p id="api-status">Estado: Comprobando...</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- MODAL PARA EDITAR -->
+    <div id="edit-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Editar Medio</h2>
+                <button class="btn-close">&times;</button>
+            </div>
+            <form id="form-editar" class="form-grid">
+                <input type="hidden" name="_id">
+                
+                <div class="form-group">
+                    <label>Título *</label>
+                    <input type="text" name="titulo" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Autor *</label>
+                    <input type="text" name="autor" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Tipo *</label>
+                    <select name="tipo" required>
+                        <option value="libro">Libro</option>
+                        <option value="audiolibro">Audiolibro</option>
+                        <option value="video">Video</option>
+                        <option value="musica">Música</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Género</label>
+                    <input type="text" name="genero">
+                </div>
+
+                <div class="form-group">
+                    <label>Año</label>
+                    <input type="number" name="año" min="1900" max="2100">
+                </div>
+
+                <div class="form-group">
+                    <label>Duración</label>
+                    <input type="text" name="duracion">
+                </div>
+
+                <div class="form-group full">
+                    <label>Descripción</label>
+                    <textarea name="descripcion" rows="4"></textarea>
+                </div>
+
+                <div class="form-group full">
+                    <label>Etiquetas</label>
+                    <input type="text" name="tags">
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Guardar Cambios
+                    </button>
+                    <button type="button" class="btn btn-secondary btn-cancel">
+                        Cancelar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATIONS -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Scripts -->
+    <script src="admin-utils.js"></script>
+    <script src="admin-app.js"></script>
+</body>
+</html>
